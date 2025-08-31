@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import AudioRecorder from './AudioRecorder';
 import AudioUploader from './AudioUploader';
 import TranscriptionService from '../services/TranscriptionService';
@@ -7,7 +7,6 @@ import PDFGenerator from './PDFGenerator';
 
 const ContentCreator = ({ user }) => {
   const [activeTab, setActiveTab] = useState('record');
-  const [audioFile, setAudioFile] = useState(null);
   const [transcription, setTranscription] = useState('');
   const [generatedContent, setGeneratedContent] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -15,7 +14,6 @@ const ContentCreator = ({ user }) => {
   const [progress, setProgress] = useState(0);
 
   const handleAudioReady = async (file) => {
-    setAudioFile(file);
     setError('');
     setIsProcessing(true);
     setProgress(25);
@@ -41,7 +39,6 @@ const ContentCreator = ({ user }) => {
   };
 
   const handleReset = () => {
-    setAudioFile(null);
     setTranscription('');
     setGeneratedContent('');
     setError('');
