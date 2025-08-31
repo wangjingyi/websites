@@ -93,25 +93,18 @@ const ContentCreator = ({ user }) => {
           {activeTab === 'record' ? (
             <AudioRecorder 
               onAudioReady={handleAudioReady}
+              onDiscard={handleReset}
               disabled={isProcessing}
             />
           ) : (
             <AudioUploader 
               onAudioReady={handleAudioReady}
+              onDiscard={handleReset}
               disabled={isProcessing}
             />
           )}
         </div>
 
-        {audioFile && (
-          <div className="card">
-            <h3>Audio File</h3>
-            <audio controls className="audio-player">
-              <source src={URL.createObjectURL(audioFile)} type={audioFile.type} />
-              Your browser does not support the audio element.
-            </audio>
-          </div>
-        )}
 
         {transcription && (
           <div className="card">

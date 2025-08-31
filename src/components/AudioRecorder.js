@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-const AudioRecorder = ({ onAudioReady, disabled }) => {
+const AudioRecorder = ({ onAudioReady, onDiscard, disabled }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState(null);
   const mediaRecorderRef = useRef(null);
@@ -51,6 +51,10 @@ const AudioRecorder = ({ onAudioReady, disabled }) => {
   const discardRecording = () => {
     setRecordedAudio(null);
     audioChunksRef.current = [];
+    // Notify parent component to reset all content
+    if (onDiscard) {
+      onDiscard();
+    }
   };
 
   return (

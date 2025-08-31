@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-const AudioUploader = ({ onAudioReady, disabled }) => {
+const AudioUploader = ({ onAudioReady, onDiscard, disabled }) => {
   const [dragOver, setDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -58,6 +58,10 @@ const AudioUploader = ({ onAudioReady, disabled }) => {
     setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+    // Notify parent component to reset all content
+    if (onDiscard) {
+      onDiscard();
     }
   };
 

@@ -1,55 +1,60 @@
 import React from 'react';
+import Logo from './Logo';
 
 const Home = () => {
   return (
     <div className="card">
-      <h2>Welcome to AI Content Creator</h2>
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <Logo size={100} />
+        <h2 style={{ marginTop: '20px' }}>📚 Smart Lecture Companion</h2>
+      </div>
       <p>
-        Transform your audio recordings into engaging, professional content using the power of AI.
-        Our platform leverages OpenAI's cutting-edge Whisper and GPT technologies to help you create
-        high-quality written content from your spoken ideas.
+        Never miss important details from your classes again! Transform your lecture recordings 
+        into organized study materials with AI-powered transcription and intelligent summaries. 
+        Perfect for students who want to focus on learning while capturing every key point.
       </p>
       
       <h3>How It Works</h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', margin: '20px 0' }}>
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎤</div>
-          <h4>Record or Upload</h4>
-          <p>Record audio directly in your browser or upload existing audio files</p>
+          <h4>Record Lectures</h4>
+          <p>Capture your teacher's lectures directly or upload existing recordings</p>
         </div>
         
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <div style={{ fontSize: '2rem', marginBottom: '12px' }}>📝</div>
-          <h4>AI Transcription</h4>
-          <p>OpenAI Whisper converts your audio into accurate text transcription</p>
+          <h4>Auto Transcription</h4>
+          <p>Convert speech to text with high accuracy, even with technical terms</p>
         </div>
         
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <div style={{ fontSize: '2rem', marginBottom: '12px' }}>✨</div>
-          <h4>Content Generation</h4>
-          <p>GPT transforms your transcription into polished, engaging content</p>
+          <h4>Smart Summaries</h4>
+          <p>Generate organized notes highlighting key concepts and important points</p>
         </div>
         
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <div style={{ fontSize: '2rem', marginBottom: '12px' }}>📄</div>
-          <h4>Download PDF</h4>
-          <p>Export your generated content as a professional PDF document</p>
+          <h4>Study Materials</h4>
+          <p>Download professional PDF notes ready for studying and sharing</p>
         </div>
       </div>
 
-      <h3>Features</h3>
+      <h3>Perfect for Students</h3>
       <ul style={{ lineHeight: '1.8' }}>
-        <li><strong>Google Authentication</strong> - Secure login with your Google account</li>
-        <li><strong>Audio Recording</strong> - Record directly in your browser with high quality</li>
-        <li><strong>File Upload</strong> - Support for various audio formats</li>
-        <li><strong>AI Transcription</strong> - Powered by OpenAI Whisper for accurate speech-to-text</li>
-        <li><strong>Content Summarization</strong> - GPT-powered content generation and summarization</li>
-        <li><strong>PDF Export</strong> - Download your content as a formatted PDF</li>
+        <li><strong>Focus on Learning</strong> - Listen actively without worrying about missing notes</li>
+        <li><strong>High-Quality Recording</strong> - Capture lectures with crystal clear audio</li>
+        <li><strong>Multiple Formats</strong> - Upload recordings from any device or app</li>
+        <li><strong>Accurate Transcripts</strong> - Get every word, including technical vocabulary</li>
+        <li><strong>Organized Summaries</strong> - Key points structured for easy review</li>
+        <li><strong>Portable Notes</strong> - Download and access your study materials anywhere</li>
+        <li><strong>Secure Access</strong> - Your recordings and notes stay private and secure</li>
       </ul>
 
       <div style={{ textAlign: 'center', marginTop: '40px' }}>
         <p style={{ fontSize: '1.1rem', color: '#666' }}>
-          Ready to transform your ideas into content? Sign in with Google to get started!
+          Ready to revolutionize your study routine? Sign in to start creating better notes from your lectures!
         </p>
       </div>
     </div>
