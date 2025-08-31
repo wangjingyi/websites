@@ -58,9 +58,11 @@ This React application transforms audio recordings into engaging, professional c
 ### Google Authentication
 
 The Google OAuth is already configured with:
-- **Client ID:** `145116248674-4cfo81gp3rj6f3v50cm67qapm04io1dl.apps.googleusercontent.com`
+- **Client ID:** Set in environment variables (see .env.example)
 - **Redirect URI:** `http://localhost:3000/oauth2callback`
 - **JavaScript Origins:** `http://localhost:3000`
+
+For production deployment, add `REACT_APP_GOOGLE_CLIENT_ID` to your hosting platform's environment variables.
 
 ## Usage
 

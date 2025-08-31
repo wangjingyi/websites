@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_GOOGLE_CLIENT_ID"
 
 [[redirects]]
   from = "/api/*"
