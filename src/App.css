@@ -1,0 +1,91 @@
+.App {
+  min-height: 100vh;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.recording-dot {
+  width: 12px;
+  height: 12px;
+  background: #dc3545;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+.audio-player {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.transcription-box {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  min-height: 100px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.content-preview {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #667eea;
+  transition: width 0.3s ease;
+}
+
+.file-input {
+  display: none;
+}
+
+.google-signin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
