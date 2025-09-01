@@ -1,24 +1,5 @@
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
 const FormData = require('form-data');
 const fetch = require('node-fetch');
-const serverless = require('serverless-http');
-
-const app = express();
-
-// Configure multer for file uploads
-const storage = multer.memoryStorage();
-const upload = multer({ 
-  storage: storage,
-  limits: {
-    fileSize: 25 * 1024 * 1024 // 25MB limit
-  }
-});
-
-// Middleware
-app.use(cors());
-app.use(express.json());
 
 // API Keys from environment variables
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -36,122 +17,121 @@ const retryWithBackoff = async (fn, maxRetries = 3, baseDelay = 1000) => {
   }
 };
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'AI Content Creator API is running' });
-});
+exports.handler = async (event, context) => {
+  // Handle CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  };
 
-// Transcribe audio endpoint
-app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No audio file provided' });
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' };
   }
 
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
-  }
+  const path = event.path.replace('/.netlify/functions/api', '');
+  const method = event.httpMethod;
 
   try {
-    const transcribeRequest = async () => {
-      const formData = new FormData();
-      formData.append('file', req.file.buffer, {
-        filename: req.file.originalname,
-        contentType: req.file.mimetype
-      });
-      formData.append('model', 'whisper-1');
+    // Health check endpoint
+    if (path === '/health' && method === 'GET') {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ status: 'OK', message: 'AI Content Creator API is running' })
+      };
+    }
 
-      const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-          ...formData.getHeaders()
-        },
-        body: formData
-      });
+    // Generate content endpoint
+    if (path === '/generate' && method === 'POST') {
+      const { transcript } = JSON.parse(event.body);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+      if (!transcript) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'No transcript provided' })
+        };
       }
 
-      return await response.json();
-    };
+      if (!OPENAI_API_KEY) {
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ error: 'OpenAI API key not configured' })
+        };
+      }
 
-    const result = await retryWithBackoff(transcribeRequest);
-    res.json({ transcript: result.text });
-  } catch (error) {
-    console.error('Transcription error:', error);
-    res.status(500).json({ 
-      error: 'Failed to transcribe audio',
-      details: error.message 
-    });
-  }
-});
+      const generateRequest = async () => {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are a professional summarizer. Create a clear, concise summary of the provided audio transcription. Focus on the main points, key insights, and important details while maintaining the original meaning.'
+              },
+              {
+                role: 'user',
+                content: `Please summarize this transcript: ${transcript}`
+              }
+            ],
+            max_tokens: 1000,
+            temperature: 0.3
+          })
+        });
 
-// Generate content endpoint
-app.post('/api/generate', async (req, res) => {
-  const { transcript } = req.body;
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+        }
 
-  if (!transcript) {
-    return res.status(400).json({ error: 'No transcript provided' });
-  }
+        return await response.json();
+      };
 
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
-  }
+      const result = await retryWithBackoff(generateRequest);
+      const summary = result.choices[0].message.content;
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ summary })
+      };
+    }
 
-  try {
-    const generateRequest = async () => {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        },
+    // Google OAuth config endpoint
+    if (path === '/auth/google/config' && method === 'GET') {
+      return {
+        statusCode: 200,
+        headers,
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a professional summarizer. Create a clear, concise summary of the provided audio transcription. Focus on the main points, key insights, and important details while maintaining the original meaning.'
-            },
-            {
-              role: 'user',
-              content: `Please summarize this transcript: ${transcript}`
-            }
-          ],
-          max_tokens: 1000,
-          temperature: 0.3
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          project_id: process.env.GOOGLE_PROJECT_ID
         })
-      });
+      };
+    }
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
-      }
-
-      return await response.json();
+    // 404 for unmatched routes
+    return {
+      statusCode: 404,
+      headers,
+      body: JSON.stringify({ error: 'Not found' })
     };
 
-    const result = await retryWithBackoff(generateRequest);
-    const summary = result.choices[0].message.content;
-    
-    res.json({ summary });
   } catch (error) {
-    console.error('Content generation error:', error);
-    res.status(500).json({ 
-      error: 'Failed to generate content',
-      details: error.message 
-    });
+    console.error('Function error:', error);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ 
+        error: 'Internal server error',
+        details: error.message 
+      })
+    };
   }
-});
-
-// Google OAuth config endpoint
-app.get('/api/auth/google/config', (req, res) => {
-  res.json({
-    client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    project_id: process.env.GOOGLE_PROJECT_ID
-  });
-});
-
-module.exports.handler = serverless(app);
+};
