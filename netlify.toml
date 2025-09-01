@@ -1,14 +1,14 @@
 [build]
   publish = "build"
   command = "npm run build"
+  functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "18"
-  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_GOOGLE_CLIENT_ID"
+  CI = "false"
 
 [[redirects]]
   from = "/api/*"
-  to = "https://websites-production-8483.up.railway.app/api/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
 
@@ -30,3 +30,6 @@
 
 [build.processing.html]
   pretty_urls = true
+
+[context.production.environment]
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_GOOGLE_CLIENT_ID"
