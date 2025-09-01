@@ -7,26 +7,8 @@
   CI = "false"
 
 [[redirects]]
-  from = "/api/health"
-  to = "/.netlify/functions/health"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/generate"
-  to = "/.netlify/functions/generate"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/transcribe"
-  to = "/.netlify/functions/transcribe"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/google/config"
-  to = "/.netlify/functions/google-config"
+  from = "/api/*"
+  to = "https://websites-production-8483.up.railway.app/api/:splat"
   status = 200
   force = true
 
