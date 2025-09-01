@@ -1,13 +1,13 @@
 class ContentService {
   static async generateContent(transcription) {
     try {
-      const response = await fetch('/api/generate-content', {
+      const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          transcription: transcription
+          transcript: transcription
         }),
       });
 
@@ -18,7 +18,7 @@ class ContentService {
       }
 
       const result = await response.json();
-      return result.content;
+      return result.summary;
     } catch (error) {
       console.error('Content generation error:', error);
       throw new Error(`Failed to generate content: ${error.message}`);
