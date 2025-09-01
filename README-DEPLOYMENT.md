@@ -4,34 +4,25 @@
 
 ### 1. Frontend Deployment (Netlify)
 The React app will be deployed to Netlify for free hosting.
+host url: https://lectureai.netlify.app
 
 ### 2. Backend Deployment Options
-Choose one of these services for your Express server:
-
-**Option A: Railway (Recommended)**
-- Free tier available
-- Easy deployment
-- Built-in environment variables
-
-**Option B: Render**
-- Free tier available
-- Automatic deployments from GitHub
-
-**Option C: Heroku**
-- Requires credit card for verification
-- More complex setup
+deploy to render.com
+host url: https://ai-content-creator-api.onrender.com
 
 ### 3. Environment Variables Needed
 
 **For Backend Service:**
 ```
 OPENAI_API_KEY=your_openai_api_key_here
-PORT=5000
+NODE_ENV=production
+
 ```
 
 **For Frontend (Netlify):**
 ```
 REACT_APP_API_URL=https://your-backend-url.railway.app
+REACT_APP_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 ```
 
 ### 4. Post-Deployment Steps
